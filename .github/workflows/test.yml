@@ -19,5 +19,8 @@ jobs:
       with:
         swift-version: '6.2'
 
+    - name: Install jemalloc
+      run: brew install jemalloc
+
     - name: Run Tests
       run: swift test
