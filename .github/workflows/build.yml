@@ -18,10 +18,20 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Setup Swift
+    # macOS と Linux は既存のアクションを利用
+    - name: Setup Swift (macOS / Linux)
+      if: runner.os != 'Windows'
       uses: swift-actions/setup-swift@v2
       with:
         swift-version: '6.2'
 
+    # Windows 環境専用のセットアップアクション
+    - name: Setup Swift (Windows)
+      if: runner.os == 'Windows'
+      uses: compnerd/gha-setup-swift@main
+      with:
+        branch: swift-6.0-release
+        tag: 6.0.3-RELEASE # 安定版のパッチバージョンまで指定する必要があります
+
     - name: Build Library
-      run: swift build --target SimpleMath
+      run: swift build
