@@ -34,3 +34,14 @@ jobs:
 
     - name: Build Library
       run: swift build --target SimpleMath
+
+  build-musl:
+      runs-on: ubuntu-latest
+      container:
+        image: swift:6.2-alpine # 公式の Alpine ベースの Swift イメージを使用
+      steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Library
+        run: swift build --target SimpleMath
