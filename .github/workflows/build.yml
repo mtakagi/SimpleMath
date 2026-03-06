@@ -28,7 +28,7 @@ jobs:
     # Windows 環境専用のセットアップアクション
     - name: Setup Swift (Windows)
       if: runner.os == 'Windows'
-      uses: compnerd/gha-setup-swift@main
+      uses: sushichop/gha-swift-env@v1
       with:
         branch: swift-6.0-release
         tag: 6.0.2-RELEASE
