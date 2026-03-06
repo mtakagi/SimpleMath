@@ -13,9 +13,11 @@ import ucrt
 #error("Unknown platform")
 #endif
 
-@usableFromInline let deg2rad: Float = .pi / 180
-@usableFromInline let rad2deg: Float = 180 / .pi
-@usableFromInline let epsilon: Float = 1e-6
+extension Float {
+    @usableFromInline static let deg2rad: Float = .pi / 180
+    @usableFromInline static let rad2deg: Float = 180 / .pi
+    @usableFromInline static let epsilon: Float = 1e-6
+}
 
 @frozen
 public struct Vector2 : Equatable, Hashable {
@@ -358,7 +360,7 @@ extension Quaternion {
     public func inverse() -> Quaternion {
         let lenSq = sqrMagnitude()
         
-        return lenSq < epsilon ? .identity : .init(self.conjugate().simd / lenSq)
+        return lenSq < .epsilon ? .identity : .init(self.conjugate().simd / lenSq)
     }
     
     @inlinable
@@ -401,10 +403,10 @@ extension Quaternion {
     @inlinable
     public static func angleAxis(degree: Float, _ axis: Vector3) -> Quaternion {
         let n = axis.normalized()
-        let radian = deg2rad * degree
+        let radian = .deg2rad * degree
         let halfRadian = radian * 0.5
-        let s = sin(halfRadian)
-        let c = cos(halfRadian)
+        let s = sinf(halfRadian)
+        let c = cosf(halfRadian)
         let v = n.simd * s
         
         return .init(x: v.x, y: v.y, z: v.z, w: c)
@@ -439,19 +441,19 @@ extension Quaternion {
         let t = toDir.normalized()
         let dot = Vector3.dot(f, t)
 
-        if dot >= 1.0 - epsilon {
+        if dot >= 1.0 - .epsilon {
             return .identity
-        } else if dot <= -1.0 + epsilon {
+        } else if dot <= -1.0 + .epsilon {
             var axis = Vector3.cross(f, .right)
             
-            if axis.sqrMagnitude() < epsilon {
+            if axis.sqrMagnitude() < .epsilon {
                 axis = Vector3.cross(f, .up)
             }
             
             return Quaternion.angleAxis(degree: 180, axis)
         } else {
             let c = Vector3.cross(f, t)
-            let s = sqrt((1.0 + dot) * 2.0)
+            let s = ((1.0 + dot) * 2.0).squareRoot()
             let inverseS = 1.0 / s
             let v = c.simd * inverseS
                 
@@ -464,7 +466,7 @@ extension Quaternion {
         let q1 = Quaternion.fromToRotation(fromDir: .forward, toDir: forward)
         let c = Vector3.cross(forward, up.normalized())
         
-        if c.sqrMagnitude() < epsilon {
+        if c.sqrMagnitude() < .epsilon {
             return q1
         }
         
