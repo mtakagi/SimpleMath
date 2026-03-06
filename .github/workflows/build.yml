@@ -31,7 +31,7 @@ jobs:
       uses: compnerd/gha-setup-swift@main
       with:
         branch: swift-6.0-release
-        tag: 6.0.3-RELEASE # 安定版のパッチバージョンまで指定する必要があります
+        tag: 6.0.2-RELEASE
 
     - name: Build Library
-      run: swift build
+      run: swift build --target SimpleMath
