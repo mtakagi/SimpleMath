@@ -25,10 +25,10 @@ jobs:
         run: git checkout main
         
       - name: Create baseline from main
-        run: swift package benchmark baseline update ci-baseline
+        run: swift package --allow-writing-to-package-directory benchmark baseline update ci-baseline
 
       - name: Checkout PR branch
         run: git checkout ${{ github.head_ref }}
 
       - name: Check performance against baseline
-        run: swift package benchmark baseline check ci-baseline
+        run: swift package --allow-writing-to-package-directory benchmark baseline check ci-baseline
