@@ -25,4 +25,5 @@ let benchmarks : @Sendable () -> Void = {
     registerVector3Benchmarks(configuration: configuration)
     registerVector4Benchmarks(configuration: configuration)
     registerQuaternionBenchmarks(configuration: configuration)
+    registerMatrix4x4Benchmarks(configuration: configuration)
 }
