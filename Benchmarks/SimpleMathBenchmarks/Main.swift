@@ -10,9 +10,15 @@ import SimpleMath
 import simd
 
 let benchmarks : @Sendable () -> Void = {
+    let thresholds: [BenchmarkMetric: BenchmarkThresholds] = [
+        .throughput: BenchmarkThresholds(relative: [.p50: -5.0]),
+        .mallocCountTotal: BenchmarkThresholds(absolute: [.p50: 0])
+    ]
+    
     let configuration = Benchmark.Configuration(
         metrics: BenchmarkMetric.default,
-        scalingFactor: .mega
+        scalingFactor: .mega,
+        thresholds: thresholds
     )
     
     registerVector2Benchmarks(configuration: configuration)
