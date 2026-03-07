@@ -143,9 +143,9 @@ import simd
     let q = Quaternion.fromToRotation(fromDir: from, toDir: to)
     let rotated = q.act(from)
         
-    #expect(rotated.simd.x == 0.0)
-    #expect(rotated.simd.y == 1.0)
-    #expect(rotated.simd.z == 0.0)
+    #expect(abs(rotated.simd.x - 0.0) < 1e-5)
+    #expect(abs(rotated.simd.y - 1.0) < 1e-5)
+    #expect(abs(rotated.simd.z - 0.0) < 1e-5)
 }
 
 @Test func from_to_rotation_parallel() {
@@ -165,9 +165,9 @@ import simd
     let q = Quaternion.fromToRotation(fromDir: from, toDir: to)
     let rotated = q.act(from)
         
-    #expect(rotated.simd.x == -1.0)
-    #expect(rotated.simd.y == 0.0)
-    #expect(rotated.simd.z == 0.0)
+    #expect(abs(rotated.simd.x - (-1.0)) < 1e-5)
+    #expect(abs(rotated.simd.y) < 1e-5)
+    #expect(abs(rotated.simd.z) < 1e-5)
 }
 
 // MARK: - QuaternionLookRotationTests

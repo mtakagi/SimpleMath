@@ -131,7 +131,16 @@ extension Vector3 : CustomStringConvertible, CustomDebugStringConvertible {
 extension Vector3 {
     @inlinable
     public func magnitude() -> Float {
-        return (self.simd * self.simd).sum().squareRoot()
+        let sqr = (self.simd * self.simd).sum()
+        
+        if sqr.isInfinite {
+            let maxVal = Swift.max(abs(self.simd.x), Swift.max(abs(self.simd.y), abs(self.simd.z)))
+            let scaled = self.simd / maxVal
+            
+            return maxVal * (scaled * scaled).sum().squareRoot()
+        }
+        
+        return sqr.squareRoot()
     }
     
     @inlinable
@@ -266,7 +275,16 @@ extension Vector4 : CustomStringConvertible, CustomDebugStringConvertible {
 extension Vector4 {
     @inlinable
     public func magnitude() -> Float {
-        return (self.simd * self.simd).sum().squareRoot()
+        let sqr = (self.simd * self.simd).sum()
+        
+        if sqr.isInfinite {
+            let maxVal = Swift.max(Swift.max(abs(self.simd.x), abs(self.simd.y)), Swift.max(abs(self.simd.z), abs(self.simd.w)))
+            let scaled = self.simd / maxVal
+            
+            return maxVal * (scaled * scaled).sum().squareRoot()
+        }
+        
+        return sqr.squareRoot()
     }
     
     @inlinable
@@ -368,24 +386,24 @@ extension Quaternion {
         return .init(x: -self.simd.x, y: -self.simd.y, z: -self.simd.z, w: self.simd.w)
     }
     
-//    @inlinable
-//    public func act(_ v: Vector3) -> Vector3 {
-//        let qv = Vector3(simd.x, simd.y, simd.z)
-//        let uv = Vector3.cross(qv, v)
-//        let uuv = Vector3.cross(qv, uv)
-//        let result = v.simd + ((uv.simd * simd.w) + uuv.simd) * 2.0
-//        
-//        return Vector3(result)
-//    }
-    
     @inlinable
     public func act(_ v: Vector3) -> Vector3 {
-        let q = self.normalized().conjugate()
-        let a = Quaternion(x: v.simd.x, y: v.simd.y, z: v.simd.z, w: 0)
-        let result = q * a * self
+        let qv = Vector3(simd.x, simd.y, simd.z)
+        let uv = Vector3.cross(qv, v)
+        let uuv = Vector3.cross(qv, uv)
+        let result = v.simd + ((uv.simd * simd.w) + uuv.simd) * 2.0
         
-        return Vector3(result.simd.x, result.simd.y, result.simd.z)
+        return Vector3(result)
     }
+    
+//    @inlinable
+//    public func act(_ v: Vector3) -> Vector3 {
+//        let q = self.normalized().conjugate()
+//        let a = Quaternion(x: v.simd.x, y: v.simd.y, z: v.simd.z, w: 0)
+//        let result = q * a * self
+//
+//        return Vector3(result.simd.x, result.simd.y, result.simd.z)
+//    }
 }
 
 extension Quaternion {
@@ -463,15 +481,16 @@ extension Quaternion {
     
     @inlinable
     public static func lookRotation(_ forward: Vector3, _ up: Vector3) -> Quaternion {
-        let q1 = Quaternion.fromToRotation(fromDir: .forward, toDir: forward)
-        let c = Vector3.cross(forward, up.normalized())
+        let f = forward.normalized()
+        let q1 = Quaternion.fromToRotation(fromDir: .forward, toDir: f)
+        let orthoUp = up.simd - f.simd * Vector3.dot(up, f)
         
-        if c.sqrMagnitude() < .epsilon {
+        if (orthoUp * orthoUp).sum() < .epsilon {
             return q1
         }
         
-        let currentUp = q1.act(Vector3.up)
-        let q2 = Quaternion.fromToRotation(fromDir: currentUp, toDir: up)
+        let currentUp = q1.act(.up)
+        let q2 = Quaternion.fromToRotation(fromDir: currentUp, toDir: Vector3(orthoUp).normalized())
         
         return q2 * q1
     }
@@ -634,9 +653,9 @@ extension Matrix4x4 {
         let wy = w * y
         let wz = w * z
 
-        return .init(1 - 2 * (yy + zz), 2 * (xy + wz), 2 * (xz - wy), 0,
-                     2 * (xy - wz), 1 - 2 * (xx + zz), 2 * (yz + wx), 0,
-                     2 * (xz + wy), 2 * (yz - wx), 1 - 2 * (xx + yy), 0,
+        return .init(1 - 2 * (yy + zz), 2 * (xy - wz), 2 * (xz + wy), 0,
+                     2 * (xy - wz), 1 - 2 * (xx + zz), 2 * (yz - wx), 0,
+                     2 * (xz - wy), 2 * (yz - wx), 1 - 2 * (xx + yy), 0,
                      0, 0, 0, 1)
     }
 }
