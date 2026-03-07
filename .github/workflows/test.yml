@@ -42,8 +42,9 @@ jobs:
     - name: Export Coverage
       run: |
         BIN_PATH=$(swift build --show-bin-path)
-        XCTEST_PATH="$BIN_PATH/SimpleMathPackageTests.xctest/Contents/MacOS/SimpleMathPackageTests"
-        xcrun llvm-cov export -format="lcov" "$XCTEST_PATH" -instr-profile="$BIN_PATH/codecov/default.profdata" > coverage.lcov
+        XCTEST_PATH="$BIN_PATH/SimpleMathPackageTests.xctest/Contents/MacOS/SimpleMathPackageTests"        
+        LLVM_COV="$(dirname "$(which swift)")/llvm-cov"        
+        "$LLVM_COV" export -format="lcov" "$XCTEST_PATH" -instr-profile="$BIN_PATH/codecov/default.profdata" > coverage.lcov
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
