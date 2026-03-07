@@ -37,4 +37,18 @@ jobs:
       run: brew install jemalloc
 
     - name: Run Tests
-      run: swift test
+      run: swift test --enable-code-coverage
+
+    - name: Export Coverage
+      run: |
+        BIN_PATH=$(swift build --show-bin-path)
+        XCTEST_PATH="$BIN_PATH/SimpleMathPackageTests.xctest/Contents/MacOS/SimpleMathPackageTests"
+        xcrun llvm-cov export -format="lcov" "$XCTEST_PATH" -instr-profile="$BIN_PATH/codecov/default.profdata" > coverage.lcov
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./coverage.lcov
+        fail_ci_if_error: true
+        verbose: true
