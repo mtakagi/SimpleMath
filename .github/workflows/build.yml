@@ -3,8 +3,22 @@ name: Build
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'Sources/**'
+      - 'Tests/**'
+      - 'Benchmarks/**'
+      - 'Package.swift'
+      - 'Package.resolved'
+      - '.github/workflows/**'
   pull_request:
     branches: [ "main" ]
+    paths:
+      - 'Sources/**'
+      - 'Tests/**'
+      - 'Benchmarks/**'
+      - 'Package.swift'
+      - 'Package.resolved'
+      - '.github/workflows/**'
 
 jobs:
   build:
