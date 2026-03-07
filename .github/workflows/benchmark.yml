@@ -1,26 +1,29 @@
-name: Benchmark
+name: Performance Benchmark
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ main ]
 
 jobs:
   benchmark:
-    runs-on: macos-14
-
+    runs-on: macos-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Setup Swift
-      uses: swift-actions/setup-swift@v2
-      with:
-        swift-version: '6.2'
+      - name: Install jemalloc
+        run: brew install jemalloc
 
-    - name: Install jemalloc
-      run: brew install jemalloc
+      - name: Checkout main branch
+        run: git checkout main
+        
+      - name: Create baseline from main
+        run: swift package benchmark baseline update ci-baseline
 
-    - name: Run Benchmarks
-      run: swift package --allow-writing-to-package-directory benchmark
+      - name: Checkout PR branch
+        run: git checkout ${{ github.head_ref }}
+
+      - name: Check performance against baseline
+        run: swift package benchmark baseline check ci-baseline
