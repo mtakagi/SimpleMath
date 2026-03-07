@@ -653,9 +653,9 @@ extension Matrix4x4 {
         let wy = w * y
         let wz = w * z
 
-        return .init(1 - 2 * (yy + zz), 2 * (xy + wz), 2 * (xz - wy), 0,
-                     2 * (xy - wz), 1 - 2 * (xx + zz), 2 * (yz + wx), 0,
-                     2 * (xz + wy), 2 * (yz - wx), 1 - 2 * (xx + yy), 0,
+        return .init(1 - 2 * (yy + zz), 2 * (xy - wz), 2 * (xz + wy), 0,
+                     2 * (xy - wz), 1 - 2 * (xx + zz), 2 * (yz - wx), 0,
+                     2 * (xz - wy), 2 * (yz - wx), 1 - 2 * (xx + yy), 0,
                      0, 0, 0, 1)
     }
 }
