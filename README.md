@@ -1,6 +1,8 @@
 # SimpleMath
 Simple Swift math library
 
+[![Build](https://github.com/mtakagi/SimpleMath/actions/workflows/build.yml/badge.svg)](https://github.com/mtakagi/SimpleMath/actions/workflows/build.yml)
+[![Test](https://github.com/mtakagi/SimpleMath/actions/workflows/test.yml/badge.svg)](https://github.com/mtakagi/SimpleMath/actions/workflows/test.yml)
 [![codecov](https://codecov.io/github/mtakagi/SimpleMath/graph/badge.svg?token=IDSJV3FQ55)](https://codecov.io/github/mtakagi/SimpleMath)
 
 このプロジェクトは自己学習用に [Swift](https://swift.org) で実装した簡単な数学ライブラリです。
