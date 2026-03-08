@@ -564,21 +564,6 @@ extension Matrix4x4 : CustomStringConvertible, CustomDebugStringConvertible {
     }
 }
 
-// TODO: remove simd library dependency
-#if canImport(simd)
-import simd
-
-extension Matrix4x4 {
-    @inlinable
-    public func inverse() -> Matrix4x4 {
-        let m = simd_float4x4(self.c0, self.c1, self.c2, self.c3)
-        let inverse = simd_inverse(m)
-        
-        return Matrix4x4(inverse.columns.0, inverse.columns.1, inverse.columns.2, inverse.columns.3)
-    }
-}
-#endif
-
 extension Matrix4x4 {
     @inlinable
     public func translation() -> Vector3 {
@@ -593,6 +578,78 @@ extension Matrix4x4 {
         let m03 = c0.y * (c1.z * c2.w - c1.w * c2.z) - c1.y * (c0.z * c2.w - c0.w * c2.z) + c2.y * (c0.z * c1.w - c0.w * c1.z)
 
         return c0.x * m00 - c1.x * m01 + c2.x * m02 - c3.x * m03
+    }
+    
+    @inlinable
+    public func inverse() -> Matrix4x4 {
+        let coef00 = c2.z * c3.w - c3.z * c2.w
+        let coef02 = c1.z * c3.w - c3.z * c1.w
+        let coef03 = c1.z * c2.w - c2.z * c1.w
+
+        let coef04 = c2.y * c3.w - c3.y * c2.w
+        let coef06 = c1.y * c3.w - c3.y * c1.w
+        let coef07 = c1.y * c2.w - c2.y * c1.w
+
+        let coef08 = c2.y * c3.z - c3.y * c2.z
+        let coef10 = c1.y * c3.z - c3.y * c1.z
+        let coef11 = c1.y * c2.z - c2.y * c1.z
+
+        let coef12 = c2.x * c3.w - c3.x * c2.w
+        let coef14 = c1.x * c3.w - c3.x * c1.w
+        let coef15 = c1.x * c2.w - c2.x * c1.w
+
+        let coef16 = c2.x * c3.z - c3.x * c2.z
+        let coef18 = c1.x * c3.z - c3.x * c1.z
+        let coef19 = c1.x * c2.z - c2.x * c1.z
+
+        let coef20 = c2.x * c3.y - c3.x * c2.y
+        let coef22 = c1.x * c3.y - c3.x * c1.y
+        let coef23 = c1.x * c2.y - c2.x * c1.y
+
+        let fac0 = SIMD4<Float>(coef00, coef00, coef02, coef03)
+        let fac1 = SIMD4<Float>(coef04, coef04, coef06, coef07)
+        let fac2 = SIMD4<Float>(coef08, coef08, coef10, coef11)
+        let fac3 = SIMD4<Float>(coef12, coef12, coef14, coef15)
+        let fac4 = SIMD4<Float>(coef16, coef16, coef18, coef19)
+        let fac5 = SIMD4<Float>(coef20, coef20, coef22, coef23)
+
+        let vec0 = SIMD4<Float>(c1.x, c0.x, c0.x, c0.x)
+        let vec1 = SIMD4<Float>(c1.y, c0.y, c0.y, c0.y)
+        let vec2 = SIMD4<Float>(c1.z, c0.z, c0.z, c0.z)
+        let vec3 = SIMD4<Float>(c1.w, c0.w, c0.w, c0.w)
+
+        let inv0 = vec1 * fac0 - vec2 * fac1 + vec3 * fac2
+        let inv1 = vec0 * fac0 - vec2 * fac3 + vec3 * fac4
+        let inv2 = vec0 * fac1 - vec1 * fac3 + vec3 * fac5
+        let inv3 = vec0 * fac2 - vec1 * fac4 + vec2 * fac5
+
+        let signA = SIMD4<Float>( 1, -1,  1, -1)
+        let signB = SIMD4<Float>(-1,  1, -1,  1)
+
+        let col0 = inv0 * signA
+        let col1 = inv1 * signB
+        let col2 = inv2 * signA
+        let col3 = inv3 * signB
+
+        let inverse = Matrix4x4(col0, col1, col2, col3)
+
+        let row0 = SIMD4<Float>(inverse.c0.x, inverse.c1.x, inverse.c2.x, inverse.c3.x)
+
+        let dot0 = c0 * row0
+        let dot1 = dot0.sum()
+        
+        if abs(dot1) < .epsilon || !dot1.isFinite {
+            return .identity
+        }
+
+        let invDet = 1.0 / dot1
+
+        return Matrix4x4(
+            inverse.c0 * invDet,
+            inverse.c1 * invDet,
+            inverse.c2 * invDet,
+            inverse.c3 * invDet
+        )
     }
 }
 
