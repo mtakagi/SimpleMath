@@ -11,15 +11,32 @@ import simd
 
 func registerMatrix4x4Benchmarks(configuration : Benchmark.Configuration) {
     Benchmark("Matrix4x4: inverse", configuration: configuration) { benchmark in
-        let m = Matrix4x4(
-            1, 2, 3, 4,
-            2, 3, 4, 1,
-            3, 4, 1, 2,
-            4, 1, 2, 3
-        )
-        
-        for _ in benchmark.scaledIterations {
+        let count = 1024
+        let inputs: [Matrix4x4] = (0..<count).map { _ in
+            Matrix4x4(Float.random(in: -10...10), Float.random(in: -10...10), Float.random(in: -10...10), Float.random(in: -10...10),
+                      Float.random(in: -10...10), Float.random(in: -10...10), Float.random(in: -10...10), Float.random(in: -10...10),
+                      Float.random(in: -10...10), Float.random(in: -10...10), Float.random(in: -10...10), Float.random(in: -10...10),
+                      Float.random(in: -10...10), Float.random(in: -10...10), Float.random(in: -10...10), Float.random(in: -10...10))
+        }
+            
+        for i in benchmark.scaledIterations {
+            let m = inputs[i & (count - 1)]
             Benchmark.blackHole(m.inverse())
+        }
+    }
+        
+    Benchmark("Matrix4x4: inverse vs simd", configuration: configuration) { benchmark in
+        let count = 1024
+        let inputs: [simd_float4x4] = (0..<count).map { _ in
+            simd_float4x4(SIMD4<Float>(Float.random(in: -10...10), Float.random(in: -10...10),Float.random(in: -10...10), Float.random(in: -10...10)),
+                          SIMD4<Float>(Float.random(in: -10...10), Float.random(in: -10...10), Float.random(in: -10...10), Float.random(in: -10...10)),
+                          SIMD4<Float>(Float.random(in: -10...10), Float.random(in: -10...10), Float.random(in: -10...10), Float.random(in: -10...10)),
+                          SIMD4<Float>(Float.random(in: -10...10), Float.random(in: -10...10), Float.random(in: -10...10), Float.random(in: -10...10)))
+        }
+            
+        for i in benchmark.scaledIterations {
+            let m = inputs[i & (count - 1)]
+            Benchmark.blackHole(simd_inverse(m))
         }
     }
     
