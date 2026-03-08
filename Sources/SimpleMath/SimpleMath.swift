@@ -576,13 +576,6 @@ extension Matrix4x4 {
         
         return Matrix4x4(inverse.columns.0, inverse.columns.1, inverse.columns.2, inverse.columns.3)
     }
-    
-    @inlinable
-    public func determinant() -> Float {
-        let m = simd_float4x4(self.c0, self.c1, self.c2, self.c3)
-        
-        return simd_determinant(m)
-    }
 }
 #endif
 
@@ -590,6 +583,16 @@ extension Matrix4x4 {
     @inlinable
     public func translation() -> Vector3 {
         return Vector3(self.c3.x, self.c3.y, self.c3.z)
+    }
+    
+    @inlinable
+    public func determinant() -> Float {
+        let m00 = c1.y * (c2.z * c3.w - c2.w * c3.z) - c2.y * (c1.z * c3.w - c1.w * c3.z) + c3.y * (c1.z * c2.w - c1.w * c2.z);
+        let m01 = c0.y * (c2.z * c3.w - c2.w * c3.z) - c2.y * (c0.z * c3.w - c0.w * c3.z) + c3.y * (c0.z * c2.w - c0.w * c2.z);
+        let m02 = c0.y * (c1.z * c3.w - c1.w * c3.z) - c1.y * (c0.z * c3.w - c0.w * c3.z) + c3.y * (c0.z * c1.w - c0.w * c1.z);
+        let m03 = c0.y * (c1.z * c2.w - c1.w * c2.z) - c1.y * (c0.z * c2.w - c0.w * c2.z) + c2.y * (c0.z * c1.w - c0.w * c1.z);
+
+        return c0.x * m00 - c1.x * m01 + c2.x * m02 - c3.x * m03;
     }
 }
 
