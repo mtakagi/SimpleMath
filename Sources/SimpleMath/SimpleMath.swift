@@ -86,6 +86,75 @@ extension Vector2 {
     }
 }
 
+extension Vector2 {
+    @inlinable
+    public static func + (_ lhs: Vector2, _ rhs: Vector2) -> Vector2 {
+        return Vector2(lhs.simd + rhs.simd)
+    }
+    
+    @inlinable
+    public static func - (_ lhs: Vector2, _ rhs: Vector2) -> Vector2 {
+        return Vector2(lhs.simd - rhs.simd)
+    }
+    
+    @inlinable
+    public static func * (_ lhs: Vector2, _ rhs: Vector2) -> Vector2 {
+        return Vector2(lhs.simd * rhs.simd)
+    }
+    
+    @inlinable
+    public static func / (_ lhs: Vector2, _ rhs: Vector2) -> Vector2 {
+        return Vector2(lhs.simd / rhs.simd)
+    }
+    
+    @inlinable
+    public static func * (_ lhs: Vector2, _ rhs: Float) -> Vector2 {
+        return Vector2(lhs.simd * rhs)
+    }
+    
+    @inlinable
+    public static func * (_ lhs: Float, _ rhs: Vector2) -> Vector2 {
+        return rhs * lhs
+    }
+    
+    @inlinable
+    public static func / (_ lhs: Vector2, _ rhs: Float) -> Vector2 {
+        return Vector2(lhs.simd / rhs)
+    }
+}
+
+extension Vector2 {
+    @inlinable
+    public static func += (lhs: inout Vector2, rhs: Vector2) {
+        lhs.simd += rhs.simd
+    }
+    
+    @inlinable
+    public static func -= (lhs: inout Vector2, rhs: Vector2) {
+        lhs.simd -= rhs.simd
+    }
+    
+    @inlinable
+    public static func *= (lhs: inout Vector2, rhs: Vector2) {
+        lhs.simd *= rhs.simd
+    }
+    
+    @inlinable
+    public static func /= (lhs: inout Vector2, rhs: Vector2) {
+        lhs.simd /= rhs.simd
+    }
+    
+    @inlinable
+    public static func *= (lhs: inout Vector2, rhs: Float) {
+        lhs.simd *= rhs
+    }
+    
+    @inlinable
+    public static func /= (lhs: inout Vector2, rhs: Float) {
+        lhs.simd /= rhs
+    }
+}
+
 @frozen
 public struct Vector3 : Equatable, Hashable {
     public var simd: SIMD3<Float>
@@ -217,6 +286,75 @@ extension Vector3 {
         let z = lhs.simd.x * rhs.simd.y - lhs.simd.y * rhs.simd.x
         
         return Vector3(x, y, z)
+    }
+}
+
+extension Vector3 {
+    @inlinable
+    public static func + (_ lhs: Vector3, _ rhs: Vector3) -> Vector3 {
+        return Vector3(lhs.simd + rhs.simd)
+    }
+    
+    @inlinable
+    public static func - (_ lhs: Vector3, _ rhs: Vector3) -> Vector3 {
+        return Vector3(lhs.simd - rhs.simd)
+    }
+    
+    @inlinable
+    public static func * (_ lhs: Vector3, _ rhs: Vector3) -> Vector3 {
+        return Vector3(lhs.simd * rhs.simd)
+    }
+    
+    @inlinable
+    public static func / (_ lhs: Vector3, _ rhs: Vector3) -> Vector3 {
+        return Vector3(lhs.simd / rhs.simd)
+    }
+    
+    @inlinable
+    public static func * (_ lhs: Vector3, _ rhs: Float) -> Vector3 {
+        return Vector3(lhs.simd * rhs)
+    }
+    
+    @inlinable
+    public static func * (_ lhs: Float, _ rhs: Vector3) -> Vector3 {
+        return rhs * lhs
+    }
+    
+    @inlinable
+    public static func / (_ lhs: Vector3, _ rhs: Float) -> Vector3 {
+        return Vector3(lhs.simd / rhs)
+    }
+}
+
+extension Vector3 {
+    @inlinable
+    public static func += (lhs: inout Vector3, rhs: Vector3) {
+        lhs.simd += rhs.simd
+    }
+    
+    @inlinable
+    public static func -= (lhs: inout Vector3, rhs: Vector3) {
+        lhs.simd -= rhs.simd
+    }
+    
+    @inlinable
+    public static func *= (lhs: inout Vector3, rhs: Vector3) {
+        lhs.simd *= rhs.simd
+    }
+    
+    @inlinable
+    public static func /= (lhs: inout Vector3, rhs: Vector3) {
+        lhs.simd /= rhs.simd
+    }
+    
+    @inlinable
+    public static func *= (lhs: inout Vector3, rhs: Float) {
+        lhs.simd *= rhs
+    }
+    
+    @inlinable
+    public static func /= (lhs: inout Vector3, rhs: Float) {
+        lhs.simd /= rhs
     }
 }
 
@@ -516,6 +654,60 @@ extension Quaternion {
     }
 }
 
+extension Quaternion {
+    @inlinable
+    public static func + (_ lhs: Quaternion, _ rhs: Quaternion) -> Quaternion {
+        return Quaternion(lhs.simd + rhs.simd)
+    }
+    
+    @inlinable
+    public static func - (_ lhs: Quaternion, _ rhs: Quaternion) -> Quaternion {
+        return Quaternion(lhs.simd - rhs.simd)
+    }
+    
+    @inlinable
+    public static func / (_ lhs: Quaternion, _ rhs: Quaternion) -> Quaternion {
+        return Quaternion(lhs.simd / rhs.simd)
+    }
+    
+    @inlinable
+    public static func * (_ lhs: Quaternion, _ rhs: Float) -> Quaternion {
+        return Quaternion(lhs.simd * rhs)
+    }
+    
+    @inlinable
+    public static func * (_ lhs: Float, _ rhs: Quaternion) -> Quaternion {
+        return rhs * lhs
+    }
+    
+    @inlinable
+    public static func / (_ lhs: Quaternion, _ rhs: Float) -> Quaternion {
+        return Quaternion(lhs.simd / rhs)
+    }
+}
+
+extension Quaternion {
+    @inlinable
+    public static func += (lhs: inout Quaternion, rhs: Quaternion) {
+        lhs.simd += rhs.simd
+    }
+    
+    @inlinable
+    public static func -= (lhs: inout Quaternion, rhs: Quaternion) {
+        lhs.simd -= rhs.simd
+    }
+
+    @inlinable
+    public static func *= (lhs: inout Quaternion, rhs: Float) {
+        lhs.simd *= rhs
+    }
+    
+    @inlinable
+    public static func /= (lhs: inout Quaternion, rhs: Float) {
+        lhs.simd /= rhs
+    }
+}
+
 @frozen
 public struct Matrix4x4 : Equatable, Hashable {
     public var c0 : SIMD4<Float>
@@ -760,5 +952,15 @@ extension Matrix4x4 {
         let r3 = lhs * rhs.c3
 
         return Matrix4x4(r0, r1, r2, r3)
+    }
+    
+    @inlinable
+    public static func * (_ lhs: Vector3, _ rhs: Matrix4x4) -> Vector3 {
+        return rhs.multiplyPoint(lhs)
+    }
+    
+    @inlinable
+    public static func *= (_ lhs: inout Matrix4x4, _ rhs: Matrix4x4) {
+        lhs = lhs * rhs
     }
 }
