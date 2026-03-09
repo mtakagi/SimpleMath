@@ -481,3 +481,182 @@ import simd
         #expect(result.c3.x != 0.0)
     }
 }
+
+// MARK: - Vector2 Tests
+@Suite struct Vector2Tests {
+    @Test func initialization() {
+        let v1 = Vector2(1, 2)
+        #expect(v1.simd.x == 1 && v1.simd.y == 2)
+        
+        let v2 = Vector2(3)
+        #expect(v2.simd.x == 3 && v2.simd.y == 3)
+    }
+    
+    @Test func properties() {
+        let v = Vector2(3, 4)
+        #expect(v.sqrMagnitude() == 25)
+    }
+    
+    @Test func minMax() {
+        let v1 = Vector2(1, 5)
+        let v2 = Vector2(3, 2)
+        #expect(Vector2.min(v1, v2) == Vector2(1, 2))
+        #expect(Vector2.max(v1, v2) == Vector2(3, 5))
+    }
+    
+    @Test func operators() {
+        let v1 = Vector2(1, 2)
+        let v2 = Vector2(3, 4)
+        
+        #expect(v1 + v2 == Vector2(4, 6))
+        #expect(v1 - v2 == Vector2(-2, -2))
+        #expect(v1 * v2 == Vector2(3, 8))
+        #expect(v2 / Vector2(2, 2) == Vector2(1.5, 2))
+        
+        #expect(v1 * 2 == Vector2(2, 4))
+        #expect(2 * v1 == Vector2(2, 4))
+        #expect(v2 / 2 == Vector2(1.5, 2))
+        
+        var v3 = Vector2(1, 1)
+        v3 += Vector2(2, 3)
+        #expect(v3 == Vector2(3, 4))
+    }
+}
+
+// MARK: - Vector3 Additional Tests
+@Suite struct Vector3AdditionalTests {
+    @Test func initializationAndProperties() {
+        let v = Vector3(Vector2(1, 2), 3)
+        #expect(v.simd.x == 1 && v.simd.y == 2 && v.simd.z == 3)
+        #expect(v.xy == Vector2(1, 2))
+        
+        let v2 = Vector3(5)
+        #expect(v2.simd.x == 5 && v2.simd.y == 5 && v2.simd.z == 5)
+    }
+    
+    @Test func distance() {
+        let v1 = Vector3(1, 2, 3)
+        let v2 = Vector3(4, 2, 7)
+        #expect(Vector3.sqrDistance(v1, v2) == 25)
+        #expect(Vector3.distance(v1, v2) == 5)
+    }
+    
+    @Test func minMax() {
+        let v1 = Vector3(1, 5, 3)
+        let v2 = Vector3(3, 2, 4)
+        #expect(Vector3.min(v1, v2) == Vector3(1, 2, 3))
+        #expect(Vector3.max(v1, v2) == Vector3(3, 5, 4))
+    }
+    
+    @Test func operators() {
+        let v1 = Vector3(1, 2, 3)
+        let v2 = Vector3(4, 5, 6)
+        
+        #expect(v1 + v2 == Vector3(5, 7, 9))
+        #expect(v1 - v2 == Vector3(-3, -3, -3))
+        #expect(v1 * v2 == Vector3(4, 10, 18))
+        #expect(v2 / Vector3(2, 2, 2) == Vector3(2, 2.5, 3))
+        
+        #expect(v1 * 2 == Vector3(2, 4, 6))
+        #expect(2 * v1 == Vector3(2, 4, 6))
+        #expect(v2 / 2 == Vector3(2, 2.5, 3))
+    }
+}
+
+// MARK: - Vector4 Tests
+@Suite struct Vector4Tests {
+    @Test func initialization() {
+        let v1 = Vector4(1, 2, 3, 4)
+        let v2 = Vector4(Vector2(1, 2), 3, 4)
+        let v3 = Vector4(Vector2(1, 2), Vector2(3, 4))
+        let v4 = Vector4(Vector3(1, 2, 3), 4)
+        let v5 = Vector4(5)
+        
+        #expect(v1 == v2)
+        #expect(v1 == v3)
+        #expect(v1 == v4)
+        #expect(v5.simd.x == 5 && v5.simd.w == 5)
+    }
+    
+    @Test func magnitude() {
+        let v = Vector4(1, 2, 2, 4) // 1 + 4 + 4 + 16 = 25
+        #expect(v.sqrMagnitude() == 25)
+        #expect(v.magnitude() == 5)
+        
+        let n = v.normalized()
+        #expect(abs(n.magnitude() - 1.0) < 1e-6)
+    }
+    
+    @Test func extremeValues() {
+        let v = Vector4(Float.greatestFiniteMagnitude, 1, 1, 1)
+        let len = v.magnitude()
+        #expect(len.isFinite)
+    }
+    
+    @Test func minMax() {
+        let v1 = Vector4(1, 5, 3, 8)
+        let v2 = Vector4(3, 2, 4, 1)
+        #expect(Vector4.min(v1, v2) == Vector4(1, 2, 3, 1))
+        #expect(Vector4.max(v1, v2) == Vector4(3, 5, 4, 8))
+    }
+}
+
+// MARK: - Quaternion Additional Tests
+@Suite struct QuaternionAdditionalTests {
+    @Test func propertiesAndConjugate() {
+        let q = Quaternion(x: 1, y: 2, z: 3, w: 4)
+        let conj = q.conjugate()
+        
+        #expect(conj == Quaternion(x: -1, y: -2, z: -3, w: 4))
+        #expect(q.vector4 == Vector4(1, 2, 3, 4))
+    }
+    
+    @Test func operators() {
+        let q1 = Quaternion(x: 1, y: 2, z: 3, w: 4)
+        let q2 = Quaternion(x: 5, y: 6, z: 7, w: 8)
+        
+        #expect(q1 + q2 == Quaternion(x: 6, y: 8, z: 10, w: 12))
+        #expect(q2 - q1 == Quaternion(x: 4, y: 4, z: 4, w: 4))
+        #expect(q1 * 2 == Quaternion(x: 2, y: 4, z: 6, w: 8))
+        #expect(2 * q1 == Quaternion(x: 2, y: 4, z: 6, w: 8))
+        #expect(q1 / 2 == Quaternion(x: 0.5, y: 1.0, z: 1.5, w: 2.0))
+        
+        var q3 = q1
+        q3 += q2
+        #expect(q3 == Quaternion(x: 6, y: 8, z: 10, w: 12))
+    }
+}
+
+// MARK: - Matrix4x4 Additional Tests
+@Suite struct Matrix4x4AdditionalTests {
+    @Test func determinant() {
+        let m1 = Matrix4x4.scale(Vector3(2, 3, 4))
+        #expect(m1.determinant() == 24)
+        
+        let m2 = Matrix4x4.identity
+        #expect(m2.determinant() == 1)
+    }
+    
+    @Test func translationProperty() {
+        let m = Matrix4x4.translate(Vector3(10, 20, 30))
+        #expect(m.translation() == Vector3(10, 20, 30))
+    }
+    
+    @Test func operators() {
+        let m1 = Matrix4x4.translate(Vector3(1, 2, 3))
+        let m2 = Matrix4x4.scale(Vector3(2, 2, 2))
+        let m3 = m1 * m2
+        
+        let p = Vector3(1, 1, 1)
+        // m3 * p = m1 * (m2 * p) = m1 * (2,2,2) = (3,4,5)
+        #expect(m3.multiplyPoint(p) == Vector3(3, 4, 5))
+        
+        // Vector3 * Matrix4x4
+        let result = p * m3
+        #expect(result == Vector3(3, 4, 5))
+        
+        var m4 = Matrix4x4.identity
+        m4 *= Matrix4x4.scale(Vector3(5, 5, 5))
+        #expect(m4.c0.x == 5.0)
+    }
+}
