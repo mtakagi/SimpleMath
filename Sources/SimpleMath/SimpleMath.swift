@@ -953,4 +953,14 @@ extension Matrix4x4 {
 
         return Matrix4x4(r0, r1, r2, r3)
     }
+    
+    @inlinable
+    public static func * (_ lhs: Vector3, _ rhs: Matrix4x4) -> Vector3 {
+        return rhs.multiplyPoint(lhs)
+    }
+    
+    @inlinable
+    public static func *= (_ lhs: inout Matrix4x4, _ rhs: Matrix4x4) {
+        lhs = lhs * rhs
+    }
 }
