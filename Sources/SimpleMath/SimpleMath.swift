@@ -289,6 +289,75 @@ extension Vector3 {
     }
 }
 
+extension Vector3 {
+    @inlinable
+    public static func + (_ lhs: Vector3, _ rhs: Vector3) -> Vector3 {
+        return Vector3(lhs.simd + rhs.simd)
+    }
+    
+    @inlinable
+    public static func - (_ lhs: Vector3, _ rhs: Vector3) -> Vector3 {
+        return Vector3(lhs.simd - rhs.simd)
+    }
+    
+    @inlinable
+    public static func * (_ lhs: Vector3, _ rhs: Vector3) -> Vector3 {
+        return Vector3(lhs.simd * rhs.simd)
+    }
+    
+    @inlinable
+    public static func / (_ lhs: Vector3, _ rhs: Vector3) -> Vector3 {
+        return Vector3(lhs.simd / rhs.simd)
+    }
+    
+    @inlinable
+    public static func * (_ lhs: Vector3, _ rhs: Float) -> Vector3 {
+        return Vector3(lhs.simd * rhs)
+    }
+    
+    @inlinable
+    public static func * (_ lhs: Float, _ rhs: Vector3) -> Vector3 {
+        return rhs * lhs
+    }
+    
+    @inlinable
+    public static func / (_ lhs: Vector3, _ rhs: Float) -> Vector3 {
+        return Vector3(lhs.simd / rhs)
+    }
+}
+
+extension Vector3 {
+    @inlinable
+    public static func += (lhs: inout Vector3, rhs: Vector3) {
+        lhs.simd += rhs.simd
+    }
+    
+    @inlinable
+    public static func -= (lhs: inout Vector3, rhs: Vector3) {
+        lhs.simd -= rhs.simd
+    }
+    
+    @inlinable
+    public static func *= (lhs: inout Vector3, rhs: Vector3) {
+        lhs.simd *= rhs.simd
+    }
+    
+    @inlinable
+    public static func /= (lhs: inout Vector3, rhs: Vector3) {
+        lhs.simd /= rhs.simd
+    }
+    
+    @inlinable
+    public static func *= (lhs: inout Vector3, rhs: Float) {
+        lhs.simd *= rhs
+    }
+    
+    @inlinable
+    public static func /= (lhs: inout Vector3, rhs: Float) {
+        lhs.simd /= rhs
+    }
+}
+
 @frozen
 public struct Vector4 : Equatable, Hashable {
     public var simd : SIMD4<Float>
