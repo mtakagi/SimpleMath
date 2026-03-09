@@ -6,7 +6,6 @@ on:
     paths:
       - 'Sources/**'
       - 'Tests/**'
-      - 'Benchmarks/**'
       - 'Package.swift'
       - 'Package.resolved'
       - '.github/workflows/**'
@@ -15,7 +14,6 @@ on:
     paths:
       - 'Sources/**'
       - 'Tests/**'
-      - 'Benchmarks/**'
       - 'Package.swift'
       - 'Package.resolved'
       - '.github/workflows/**'
