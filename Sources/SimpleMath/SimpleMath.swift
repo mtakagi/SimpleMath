@@ -654,6 +654,60 @@ extension Quaternion {
     }
 }
 
+extension Quaternion {
+    @inlinable
+    public static func + (_ lhs: Quaternion, _ rhs: Quaternion) -> Quaternion {
+        return Quaternion(lhs.simd + rhs.simd)
+    }
+    
+    @inlinable
+    public static func - (_ lhs: Quaternion, _ rhs: Quaternion) -> Quaternion {
+        return Quaternion(lhs.simd - rhs.simd)
+    }
+    
+    @inlinable
+    public static func / (_ lhs: Quaternion, _ rhs: Quaternion) -> Quaternion {
+        return Quaternion(lhs.simd / rhs.simd)
+    }
+    
+    @inlinable
+    public static func * (_ lhs: Quaternion, _ rhs: Float) -> Quaternion {
+        return Quaternion(lhs.simd * rhs)
+    }
+    
+    @inlinable
+    public static func * (_ lhs: Float, _ rhs: Quaternion) -> Quaternion {
+        return rhs * lhs
+    }
+    
+    @inlinable
+    public static func / (_ lhs: Quaternion, _ rhs: Float) -> Quaternion {
+        return Quaternion(lhs.simd / rhs)
+    }
+}
+
+extension Quaternion {
+    @inlinable
+    public static func += (lhs: inout Quaternion, rhs: Quaternion) {
+        lhs.simd += rhs.simd
+    }
+    
+    @inlinable
+    public static func -= (lhs: inout Quaternion, rhs: Quaternion) {
+        lhs.simd -= rhs.simd
+    }
+
+    @inlinable
+    public static func *= (lhs: inout Quaternion, rhs: Float) {
+        lhs.simd *= rhs
+    }
+    
+    @inlinable
+    public static func /= (lhs: inout Quaternion, rhs: Float) {
+        lhs.simd /= rhs
+    }
+}
+
 @frozen
 public struct Matrix4x4 : Equatable, Hashable {
     public var c0 : SIMD4<Float>
