@@ -17,3 +17,7 @@ It currently includes implementations for **Vector2**, **Vector3**, **Vector4**,
 - [DirectXMath](https://github.com/microsoft/DirectXMath)
 - [Unity-Technologies/Unity.Mathematics](https://github.com/Unity-Technologies/Unity.Mathematics)
 - [Unity-Technologies/UnityCsReference](https://github.com/Unity-Technologies/UnityCsReference)
+
+また実装した型とメソッドなどは [UniDx](https://github.com/nittamas/UniDx) の [Math.h](https://github.com/nittamas/UniDx/blob/main/UniDx/include/UniDx/Math.h) を参考にしました。
+
+The implemented types and methods are based on [Math.h](https://github.com/nittamas/UniDx/blob/main/UniDx/include/UniDx/Math.h) from the [UniDx](https://github.com/nittamas/UniDx) project.
